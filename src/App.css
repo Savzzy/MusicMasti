@@ -35,3 +35,37 @@ body{
 .profile-followers,profile-genres{
  font-size:18px;
 }
+.track{
+    display:inline-block;
+    width:220px;
+    height:220px;
+    position:absolute;
+    margin: 10px;
+    text-align: left;
+    cursor:pointer;
+    position:relative;
+}
+.track-img{
+    object-fit: cover;
+    width : 220px;
+    height : 220px;
+    border : 3px solid #fff;
+    border-radius : 3px;
+    position:relative;
+}
+.track-text{
+    background-color:  black;
+    color :white;
+    opacity : 0.75;
+    width :214px;
+    margin-left: 3px;
+    text-align :center;
+    position: absolute;
+    bottom: 0;
+    padding : 3px;
+   
+
+
+
+
+}

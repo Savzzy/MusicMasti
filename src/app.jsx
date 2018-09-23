@@ -50,21 +50,24 @@ class App extends Component {
                 console.log('artists', artist);
                 this.setState({ artist: artist });
                 // console.log("searchResult",JSON.stringify(result));
-                FETCH_URL = `${ALBUM_URL}${artist.id}/top-tracks?country=IN&`;
+                if (artist){
+                    FETCH_URL = `${ALBUM_URL}${artist.id}/top-tracks?country=US&`;
 
-                fetch(FETCH_URL, {
-                    method: "GET",
-                    headers: {
-                        "Authorization": "Bearer " + this.state.accessToken
-                    }
-                })
-                    .then(response => response.json())
-                    .then(json => {
-                        console.log("artist's top tracks:", json);
-                        const tracks = json.tracks;
-                        this.setState({tracks: tracks});
-
+                    fetch(FETCH_URL, {
+                        method: "GET",
+                        headers: {
+                            "Authorization": "Bearer " + this.state.accessToken
+                        }
                     })
+                        .then(response => response.json())
+                        .then(json => {
+                            console.log("artist's top tracks:", json);
+                            const tracks = json.tracks;
+                            this.setState({ tracks: tracks });
+
+                        })
+                    
+                }
             })
             .catch(error => console.log(error));
 
@@ -98,7 +101,7 @@ class App extends Component {
                     </InputGroup>
                 </FormGroup>
                 {
-                    this.state.artist !== null
+                    ((this.state.artist !== null))
                         ?
                         <div>
                             <Profile
