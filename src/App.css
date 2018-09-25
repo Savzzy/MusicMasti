@@ -51,7 +51,7 @@ body{
     height : 220px;
     border : 3px solid #fff;
     border-radius : 3px;
-    position:relative;
+    position:absolute;
 }
 .track-text{
     background-color:  black;
@@ -63,9 +63,40 @@ body{
     position: absolute;
     bottom: 0;
     padding : 3px;
+}
+.track-play{
+    position: absolute;
+    width : 220px;
+    height: 220px;
    
+}
 
-
-
+.track-play-inner{
+    position : absolute;
+    text-align : center;
+    font-size:20px;
+    background-color : black;
+    border-radius: 50px;
+    width :50px;
+    height : 50px;
+    color :white;
+    padding-top : 12px;
+    margin-left : 80px;
+    margin-top :80px;
 
 }
+
+.track-play-inner:hover{
+    opacity : 0.8;
+    animation-name:fade-in;
+    animation-duration: 0.5s;
+ }
+
+ @keyframes fade-in {
+     from{
+         opacity : 0;
+     }
+     to{
+         opacity:0.8;
+     }
+ }
