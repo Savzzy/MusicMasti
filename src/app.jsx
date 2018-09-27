@@ -57,7 +57,9 @@ class App extends Component {
                         method: "GET",
                         headers: {
                             "Authorization": "Bearer " + this.state.accessToken
-                        }
+                      }
+
+                
                     })
                         .then(response => response.json())
                         .then(json => {
@@ -66,7 +68,22 @@ class App extends Component {
                             this.setState({ tracks: tracks });
 
                         })
-                    
+                    const FEATURED_PLAYSIT_URL = "https://api.spotify.com/v1/browse/featured-playlists?country=US&limit=5";
+                    fetch(FEATURED_PLAYSIT_URL , {
+                        method : "GET",
+                        headers : {
+                            "Authorization" : "Bearer " + this.state.accessToken
+                        }
+                    })
+                        .then(playlist => playlist.json())
+                        .then(playlist_json => {
+                            console.log("Artist's featured playlist : " , playlist_json)
+                            const  playlists = playlist_json.playlists.items;
+                            console.log("playlist",playlist_json.playlists.items);
+                            this.setState({playlists : playlists});
+                        })
+                        .catch(error => console.log(error));
+
                 }
             })
             .catch(error => console.log(error));
