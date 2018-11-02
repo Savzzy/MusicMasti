@@ -3,6 +3,7 @@ import './App.css';
 import { FormGroup, FormControl, InputGroup, Glyphicon } from 'react-bootstrap';
 import Profile from './profile';
 import Gallery from './gallery';
+import Playlist from './playlist'
 
 class App extends Component {
     constructor(props) {
@@ -10,7 +11,8 @@ class App extends Component {
         this.state = {
             query: "",
             artist: null,
-            tracks: []
+            tracks: [],
+            playlists: []
         }
     }
     componentDidMount() {
@@ -23,8 +25,24 @@ class App extends Component {
             .then(res => {
                 console.log('token received', JSON.stringify(res));
                 this.setState({ accessToken: res.access_token });
+                const FEATURED_PLAYSIT_URL = "https://api.spotify.com/v1/browse/featured-playlists?country=US&limit=6";
+                fetch(FEATURED_PLAYSIT_URL, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": "Bearer " + this.state.accessToken
+                    }
+                })
+                    .then(playlist => playlist.json())
+                    .then(playlist_json => {
+                        console.log("Artist's featured playlist : ", playlist_json)
+                        const playlists = playlist_json.playlists.items;
+                        console.log("playlist", playlist_json.playlists.items);
+                        this.setState({ playlists: playlists });
+                    })
+                    .catch(error => console.log(error));
             })
             .catch(error => console.error('Error while getting token', error));
+
 
     }
     search() {
@@ -50,16 +68,15 @@ class App extends Component {
                 console.log('artists', artist);
                 this.setState({ artist: artist });
                 // console.log("searchResult",JSON.stringify(result));
-                if (artist){
+                if (artist) {
                     FETCH_URL = `${ALBUM_URL}${artist.id}/top-tracks?country=US&`;
 
+                    //get artist's top tracks
                     fetch(FETCH_URL, {
                         method: "GET",
                         headers: {
                             "Authorization": "Bearer " + this.state.accessToken
-                      }
-
-                
+                        }
                     })
                         .then(response => response.json())
                         .then(json => {
@@ -68,25 +85,10 @@ class App extends Component {
                             this.setState({ tracks: tracks });
 
                         })
-                    const FEATURED_PLAYSIT_URL = "https://api.spotify.com/v1/browse/featured-playlists?country=US&limit=5";
-                    fetch(FEATURED_PLAYSIT_URL , {
-                        method : "GET",
-                        headers : {
-                            "Authorization" : "Bearer " + this.state.accessToken
-                        }
-                    })
-                        .then(playlist => playlist.json())
-                        .then(playlist_json => {
-                            console.log("Artist's featured playlist : " , playlist_json)
-                            const  playlists = playlist_json.playlists.items;
-                            console.log("playlist",playlist_json.playlists.items);
-                            this.setState({playlists : playlists});
-                        })
-                        .catch(error => console.log(error));
-
                 }
             })
             .catch(error => console.log(error));
+
 
     }
 
@@ -117,6 +119,12 @@ class App extends Component {
                         </InputGroup.Addon>
                     </InputGroup>
                 </FormGroup>
+                <div>
+                    <div className="FeaturedAlbumText"> Featured Albums </div>
+                    <Playlist
+                        playlists={this.state.playlists}
+                    />
+                </div>
                 {
                     ((this.state.artist !== null))
                         ?
@@ -125,10 +133,11 @@ class App extends Component {
                                 artist={this.state.artist}
                             />
                             <Gallery
-                            tracks ={this.state.tracks}/>
+                                tracks={this.state.tracks} />
                         </div>
                         : <div></div>
                 }
+
 
 
 
